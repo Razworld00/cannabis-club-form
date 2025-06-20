@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cannabis Club Membership Form">
+    <meta name="author" content="Razworld00">
+    <title>Cannabis Club Form</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 100px auto 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .section-title {
+            background-color: #d4a017;
+            color: white;
+            padding: 10px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 10px 10px 0 0;
+            font-size: 18px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-group input[type="radio"], .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        button {
+            padding: 12px 25px;
+            background-color: #d4a017;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #b88d13;
+        }
+        .error {
+            color: #dc3545;
+            font-size: 12px;
+            display: none;
+            margin-top: 5px;
+        }
+        #canvasPanel {
+            position: fixed;
+            right: 20px;
+            top: 120px;
+            width: 300px;
+            height: 400px;
+            border: 1px solid #ccc;
+            background: #fff;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        #progressBar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        #progress {
+            height: 100%;
+            background: #2e5a3a;
+            border-radius: 5px;
+            width: 0;
+            transition: width 0.3s;
+        }
+        #confirmation {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            z-index: 2000;
+        }
+        #confirmation.show {
+            display: block;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        #overlay.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <main class="container" role="main">
+        <header>
+            <h1>CANNABIS CLUB FORM</h1>
+            <p>email: <a href="mailto:user@example.com">user@example.com</a> <button onclick="switchAccount()" aria-label="Switch account">Switch account</button></p>
+        </header>
+        <div id="progressBar"><div id="progress"></div></div>
+        <form id="membershipForm" novalidate>
+            <section id="page1" class="page" aria-labelledby="applicant-title">
+                <h2 id="applicant-title" class="section-title">APPLICANT INFORMATION</h2>
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" name="fullName" required aria-describedby="fullNameError">
+                    <span class="error" id="fullNameError">Please fill in this field.</span>
+                </div>
+                <div class="form-group">
+                    <label for="idNumber">ID Number *</label>
+                    <input type="text" id="idNumber" name="idNumber" required aria-describedby="idNumberError">
+                    <span class="error" id="idNumberError">Please fill in this field.</span>
+                </div>
+                <div class="form-group">
+                    <label for="clanName">Clan Name (Ungumni?)</label>
+                    <input type="text" id="clanName" name="clanName">
+                </div>
+                <div class="form-group">
+                    <label for="inviter">Who invited you to the club?</label>
+                    <input type="text" id="inviter" name="inviter">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <input type="radio" name="gender" value="male" id="genderMale" required><label for="genderMale">Male</label>
+                    <input type="radio" name="gender" value="female" id="genderFemale"><label for="genderFemale">Female</label>
+                    <input type="radio" name="gender" value="preferNot" id="genderPreferNot"><label for="genderPreferNot">Prefer not to say</label>
+                    <input type="radio" name="gender" value="other" id="genderOtherRadio"><label for="genderOtherRadio">Other:</label> <input type="text" id="genderOther" name="genderOther">
+                </div>
+                <div class="form-group">
+                    <label>Population Group</label>
+                    <input type="radio" name="population" value="black" id="populationBlack" required><label for="populationBlack">Black</label>
+                    <input type="radio" name="population" value="white" id="populationWhite"><label for="populationWhite">White</label>
+                    <input type="radio" name="population" value="other" id="populationOtherRadio"><label for="populationOtherRadio">Other:</label> <input type="text" id="populationOther" name="populationOther">
+                </div>
+                <div class="form-group">
+                    <label for="contactNumber">Contact Number *</label>
+                    <input type="tel" id="contactNumber" name="contactNumber" required pattern="[0-9]{10}" aria-describedby="contactError">
+                    <span class="error" id="contactError">Please enter a valid 10-digit number.</span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required aria-describedby="emailError">
+                    <span class="error" id="emailError">Please enter a valid email.</span>
+                </div>
+                <div class="button-group">
+                    <button type="button" onclick="nextPage(2)">Next</button>
+                    <button type="button" onclick="clearForm()">Clear form</button>
+                </div>
+            </section>
+            <section id="page2" class="page" style="display: none;" aria-labelledby="experience-title">
+                <h2 id="experience-title" class="section-title">CANNABIS EXPERIENCE</h2>
+                <div class="form-group">
+                    <label>Have You Used Cannabis Before?</label>
+                    <input type="radio" name="cannabisUsed" value="yes" id="cannabisYes" required><label for="cannabisYes">Yes</label>
+                    <input type="radio" name="cannabisUsed" value="no" id="cannabisNo"><label for="cannabisNo">No</label>
+                    <input type="radio" name="cannabisUsed" value="other" id="cannabisOtherRadio"><label for="cannabisOtherRadio">Other:</label> <input type="text" id="cannabisOther" name="cannabisOther">
+                </div>
+                <div class="form-group">
+                    <label for="preferredStrains">Name Your Preferred Cannabis Strains</label>
+                    <input type="text" id="preferredStrains" name="preferredStrains">
+                </div>
+                <div class="form-group">
+                    <label>Which do you prefer?</label>
+                    <input type="radio" name="strainType" value="sativa" id="strainSativa" required><label for="strainSativa">Sativa</label>
+                    <input type="radio" name="strainType" value="indica" id="strainIndica"><label for="strainIndica">Indica</label>
+                    <input type="radio" name="strainType" value="mixed" id="strainMixed"><label for="strainMixed">Mixed</label>
+                </div>
+                <div class="form-group">
+                    <label>Is your cannabis THC or CBD dominant?</label>
+                    <input type="radio" name="dominant" value="thc" id="dominantThc" checked><label for="dominantThc">THC</label>
+                    <input type="radio" name="dominant" value="cbd" id="dominantCbd"><label for="dominantCbd">CBD</label>
+                </div>
+                <div class="form-group">
+                    <label>Which cannabis products would you like to share with the club members?</label>
+                    <input type="checkbox" name="products" value="highGrade" id="productHighGrade"><label for="productHighGrade">High Grade Bud</label>
+                    <input type="checkbox" name="products" value="edibles" id="productEdibles"><label for="productEdibles">Edibles</label>
+                    <input type="checkbox" name="products" value="cosmetics" id="productCosmetics"><label for="productCosmetics">Cosmetics</label>
+                    <input type="checkbox" name="products" value="liquor" id="productLiquor"><label for="productLiquor">Liquor</label>
+                    <input type="checkbox" name="products" value="processed" id="productProcessed"><label for="productProcessed">Cannabis to be processed by other manufactures</label>
+                    <input type="checkbox" name="products" value="blended" id="productBlended"><label for="productBlended">Cannabis oil to be blended with other manufactures products</label>
+                    <input type="checkbox" name="products" value="other" id="productOtherRadio"><label for="productOtherRadio">Other:</label> <input type="text" id="productsOther" name="productsOther">
+                </div>
+                <div class="form-group">
+                    <label for="reason">Tell us why you want to be in the Cannabis industry?</label>
+                    <textarea id="reason" name="reason" rows="4"></textarea>
+                </div>
+                <div class="button-group">
+                    <button type="button" onclick="prevPage(1)">Back</button>
+                    <button type="button" onclick="nextPage(3)">Next</button>
+                    <button type="button" onclick="clearForm()">Clear form</button>
+                </div>
+            </section>
+            <section id="page3" class="page" style="display: none;" aria-labelledby="security-title">
+                <h2 id="security-title" class="section-title">SECURITY CHECK</h2>
+                <div class="form-group">
+                    <label>Is all the above information true?</label>
+                    <input type="radio" name="security" value="yes" id="securityYes" required><label for="securityYes">Yes</label>
+                    <input type="radio" name="security" value="no" id="securityNo"><label for="securityNo">No</label>
+                    <input type="radio" name="security" value="maybe" id="securityMaybe"><label for="securityMaybe">Maybe</label>
+                </div>
+                <div class="button-group">
+                    <button type="button" onclick="prevPage(2)">Back</button>
+                    <button type="button" onclick="submitForm()">Submit</button>
+                    <button type="button" onclick="clearForm()">Clear form</button>
+                </div>
+            </section>
+        </form>
+    </main>
+    <div id="canvasPanel">
+        <canvas id="formCanvas" width="280" height="380"></canvas>
+    </div>
+    <div id="overlay"></div>
+    <div id="confirmation">
+        <h3>Submission Confirmation</h3>
+        <p>Your form has been submitted successfully at 01:03 PM SAST on Friday, June 20, 2025. Thank you!</p>
+        <button type="button" onclick="closeConfirmation()">Close</button>
+    </div>
+    <script>
+        let currentPage = 1;
+        const pages = document.querySelectorAll('.page');
+        const progress = document.getElementById('progress');
+        const canvas = document.getElementById('formCanvas');
+        const ctx = canvas.getContext('2d');
+        const confirmation = document.getElementById('confirmation');
+        const overlay = document.getElementById('overlay');
+        const form = document.getElementById('membershipForm');
+
+        function loadFormData() {
+            const savedData = JSON.parse(localStorage.getItem('formData')) || {};
+            document.getElementById('fullName').value = savedData.fullName || '';
+            document.getElementById('idNumber').value = savedData.idNumber || '';
+            document.getElementById('clanName').value = savedData.clanName || '';
+            document.getElementById('inviter').value = savedData.inviter || '';
+            document.querySelectorAll('input[name="gender"]').forEach(radio => {
+                radio.checked = savedData.gender === radio.value;
+            });
+            document.getElementById('genderOther').value = savedData.genderOther || '';
+            document.querySelectorAll('input[name="population"]').forEach(radio => {
+                radio.checked = savedData.population === radio.value;
+            });
+            document.getElementById('populationOther').value = savedData.populationOther || '';
+            document.getElementById('contactNumber').value = savedData.contactNumber || '';
+            document.getElementById('email').value = savedData.email || '';
+            document.querySelectorAll('input[name="cannabisUsed"]').forEach(radio => {
+                radio.checked = savedData.cannabisUsed === radio.value;
+            });
+            document.getElementById('cannabisOther').value = savedData.cannabisOther || '';
+            document.getElementById('preferredStrains').value = savedData.preferredStrains || '';
+            document.querySelectorAll('input[name="strainType"]').forEach(radio => {
+                radio.checked = savedData.strainType === radio.value;
+            });
+            document.querySelectorAll('input[name="dominant"]').forEach(radio => {
+                radio.checked = savedData.dominant === radio.value;
+            });
+            document.querySelectorAll('input[name="products"]').forEach(checkbox => {
+                checkbox.checked = savedData.products ? savedData.products.includes(checkbox.value) : false;
+            });
+            document.getElementById('productsOther').value = savedData.productsOther || '';
+            document.getElementById('reason').value = savedData.reason || '';
+            document.querySelectorAll('input[name="security"]').forEach(radio => {
+                radio.checked = savedData.security === radio.value;
+            });
+        }
+
+        function saveFormData() {
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                idNumber: document.getElementById('idNumber').value,
+                clanName: document.getElementById('clanName').value,
+                inviter: document.getElementById('inviter').value,
+                gender: document.querySelector('input[name="gender"]:checked')?.value,
+                genderOther: document.getElementById('genderOther').value,
+                population: document.querySelector('input[name="population"]:checked')?.value,
+                populationOther: document.getElementById('populationOther').value,
+                contactNumber: document.getElementById('contactNumber').value,
+                email: document.getElementById('email').value,
+                cannabisUsed: document.querySelector('input[name="cannabisUsed"]:checked')?.value,
+                cannabisOther: document.getElementById('cannabisOther').value,
+                preferredStrains: document.getElementById('preferredStrains').value,
+                strainType: document.querySelector('input[name="strainType"]:checked')?.value,
+                dominant: document.querySelector('input[name="dominant"]:checked')?.value,
+                products: Array.from(document.querySelectorAll('input[name="products"]:checked')).map(cb => cb.value),
+                productsOther: document.getElementById('productsOther').value,
+                reason: document.getElementById('reason').value,
+                security: document.querySelector('input[name="security"]:checked')?.value
+            };
+            localStorage.setItem('formData', JSON.stringify(formData));
+        }
+
+        function validatePage(page) {
+            let isValid = true;
+            if (page === 1) {
+                const fullName = document.getElementById('fullName').value.trim();
+                const idNumber = document.getElementById('idNumber').value.trim();
+                const contactNumber = document.getElementById('contactNumber').value.trim();
+                const email = document.getElementById('email').value.trim();
+                document.getElementById('fullNameError').style.display = fullName ? 'none' : 'block';
+                document.getElementById('idNumberError').style.display = idNumber ? 'none' : 'block';
+                document.getElementById('contactError').style.display = contactNumber.match(/[0-9]{10}/) ? 'none' : 'block';
+                document.getElementById('emailError').style.display = email.match(/\S+@\S+\.\S+/) ? 'none' : 'block';
+                isValid = fullName && idNumber && contactNumber.match(/[0-9]{10}/) && email.match(/\S+@\S+\.\S+/) && document.querySelector('input[name="gender"]:checked') && document.querySelector('input[name="population"]:checked');
+            } else if (page === 2) {
+                const cannabisUsed = document.querySelector('input[name="cannabisUsed"]:checked');
+                const reason = document.getElementById('reason').value.trim();
+                isValid = (cannabisUsed !== null || reason) && document.querySelector('input[name="strainType"]:checked');
+            } else if (page === 3) {
+                isValid = document.querySelector('input[name="security"]:checked') !== null;
+            }
+            return isValid;
+        }
+
+        function nextPage(pageNum) {
+            if (validatePage(currentPage)) {
+                saveFormData();
+                pages.forEach(page => page.style.display = 'none');
+                document.getElementById(`page${pageNum}`).style.display = 'block';
+                currentPage = pageNum;
+                progress.style.width = `${(pageNum / 3) * 100}%`;
+                drawCanvas();
+            }
+        }
+
+        function prevPage(pageNum) {
+            saveFormData();
+            pages.forEach(page => page.style.display = 'none');
+            document.getElementById(`page${pageNum}`).style.display = 'block';
+            currentPage = pageNum;
+            progress.style.width = `${(pageNum / 3) * 100}%`;
+            drawCanvas();
+        }
+
+        function switchAccount() {
+            alert('Switch account functionality not implemented.');
+        }
+
+        function clearForm() {
+            localStorage.removeItem('formData');
+            form.reset();
+            pages.forEach(page => page.style.display = 'none');
+            document.getElementById('page1').style.display = 'block';
+            currentPage = 1;
+            progress.style.width = '0%';
+            drawCanvas();
+        }
+
+        function submitForm() {
+            if (validatePage(currentPage)) {
+                saveFormData();
+                const now = new Date();
+                const timeString = now.toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg', hour12: true, hour: '2-digit', minute: '2-digit' });
+                confirmation.innerHTML = `
+                    <h3>Submission Confirmation</h3>
+                    <p>Your form has been submitted successfully at ${timeString} on Friday, June 20, 2025. Thank you!</p>
+                    <button type="button" onclick="closeConfirmation()">Close</button>
+                `;
+                overlay.classList.add('show');
+                confirmation.classList.add('show');
+                drawCanvas();
+            }
+        }
+
+        function closeConfirmation() {
+            overlay.classList.remove('show');
+            confirmation.classList.remove('show');
+        }
+
+        function drawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#2e5a3a';
+            ctx.fillRect(10, 10, (currentPage / 3) * (canvas.width - 20), 20);
+            ctx.fillStyle = 'black';
+            ctx.font = '14px Arial';
+            ctx.fillText(`Page ${currentPage} of 3`, 10, 40);
+            canvas.parentElement.style.display = 'block';
+        }
+
+        loadFormData();
+        document.getElementById('page1').style.display = 'block';
+        progress.style.width = '33.33%';
+        drawCanvas();
+    </script>
+</body>
+</html>
